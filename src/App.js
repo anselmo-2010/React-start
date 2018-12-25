@@ -11,23 +11,27 @@ class App extends Component {
     ]
   };
 
-  changeName = ()=> {
+  changeName = (event, index)=> {
+      console.log('here', event.target.value, index)
       const peopleCopy = [...this.state.people];
-      const personCopy = {...this.state.people[1]}
+      const personCopy = {...this.state.people[index]}
 
-      personCopy.name = 'John Doe';
+      personCopy.name = event.target.value;
 
-      peopleCopy[1] = personCopy;
+      peopleCopy[index] = personCopy;
 
       this.setState({people: peopleCopy});
     };
 
-  increaseAge = ()=> {
-    const people = this.state.people.map(person => ({
-        ...person,
-        age: person.age +1
-    }));
-    this.setState( {people});
+  increaseAge = index => {
+      const peopleCopy = [...this.state.people];
+      const personCopy = {...this.state.people[index]}
+
+      personCopy.age++;
+
+      peopleCopy[index] = personCopy;
+
+      this.setState({people: peopleCopy});
   };
 
   render() {
@@ -36,17 +40,20 @@ class App extends Component {
         <Person
             name ={this.state.people[0].name}
             age={this.state.people[0].age}
+            onClick = { () => this.increaseAge(0)}
+            onChange={event=>this.changeName(event,0)}
         >
           <i>{this.state.people[0].hobby}</i>
         </Person>
         <Person
             name ={this.state.people[1].name}
             age={this.state.people[1].age}
+            onClick = { ()=> this.increaseAge(1)}
+            onChange={event => this.changeName(event,1)}
         >
           <i>{this.state.people[1].hobby}</i>
         </Person>
         <button onClick={this.changeName}>Change name</button>
-        <button onClick={this.increaseAge}>IncreaseAge</button>
       </div>
     );
   }
